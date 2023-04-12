@@ -19,6 +19,7 @@ const std::string display[] = {
         "29", "30", "31",
 };
 const int widths[] = {6, 6, 7, 7, 7, 7, 3};
+const int widths_cumsum[] = {0, 6, 12, 19, 26, 33, 40, 43};
 
 int name_to_index(const std::string &name);
 

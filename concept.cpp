@@ -20,13 +20,8 @@ int name_to_index(const std::string &name) {
     }
 }
 
-int coord_to_linear(int y, int x) {
-    int result = 0;
-    for (int j = 0; j < y; ++j) {
-        result += widths[j];
-    }
-    result += x;
-    return result;
+inline int coord_to_linear(int y, int x) {
+    return widths_cumsum[y] + x;
 }
 
 Index linear_to_coord(int index) {
@@ -108,15 +103,17 @@ Board::operator std::string() {
 }
 
 bool Board::put(const Block &block, Index yx) {
-    auto result = std::all_of(block.pos.begin(), block.pos.end(), [&yx, this](auto p) {
-        auto position = yx + p;
-        auto cell_p = pointer(position.y, position.x);
-        return cell_p && cell_p->v == -1;
-    });
+    auto result = true;
+    for (auto &p: block.pos) {
+        auto cell_p = pointer(yx.y + p.y, yx.x + p.x);
+        if (!cell_p || cell_p->v != -1) {
+            result = false;
+            break;
+        }
+    }
     if (result) {
         for (auto &p: block.pos) {
-            auto position = yx + p;
-            operator()(position.y, position.x).v = block.id;
+            operator()(yx.y + p.y, yx.x + p.x).v = block.id;
         }
     }
     return result;

@@ -2,20 +2,22 @@
 #include <deque>
 #include <string>
 #include <chrono>
-#include <map>
 #include "concept.h"
 
 std::vector<Block> cache(8 * 2 * 4 * 6);
 
 void build_cache() {
     for (int b = 0; b < 8; b++) {
+        auto block = Block{blocks[b]};
         for (int flip = 0; flip < 2; flip++) {
             for (int rot = 0; rot < 4; rot++) {
                 for (int m = 0; m < blocks[b].pos.size(); m++) {
                     auto k = ((b * 2 + flip) * 4 + rot) * 6 + m;
-                    cache[k] = blocks[b].flip(flip).rotate(rot).anchor(m);
+                    cache[k] = block.anchor_inplace(m);
                 }
+                block.rotate_inplace(1);
             }
+            block.flip_inplace();
         }
     }
 }
