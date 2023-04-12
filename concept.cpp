@@ -127,6 +127,7 @@ void Board::pick(int block_id) {
 
 std::vector<int> Board::index_available() {
     std::vector<int> result;
+    result.reserve(43);
     for (int i = 0; i < cells.size(); i++) {
         if (cells[i].v == -1) {
             result.emplace_back(i);
