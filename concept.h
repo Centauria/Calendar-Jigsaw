@@ -101,6 +101,8 @@ const Block blocks[] = {
                                     {1, 2},
                                     {0, 3}}},
 };
+const int flip_num[] = {1, 1, 2, 2, 1, 2, 2, 2};
+const int rotate_num[] = {2, 4, 4, 4, 4, 4, 2, 4};
 
 struct Board {
     Board();

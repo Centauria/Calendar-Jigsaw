@@ -9,8 +9,8 @@ Block cache[8 * 2 * 4 * 6];
 void build_cache() {
     for (int b = 0; b < 8; b++) {
         auto block = Block{blocks[b]};
-        for (int flip = 0; flip < 2; flip++) {
-            for (int rot = 0; rot < 4; rot++) {
+        for (int flip = 0; flip < flip_num[b]; flip++) {
+            for (int rot = 0; rot < rotate_num[b]; rot++) {
                 for (int m = 0; m < blocks[b].pos.size(); m++) {
                     auto k = ((b * 2 + flip) * 4 + rot) * 6 + m;
                     cache[k] = block.anchor_inplace(m);
@@ -25,9 +25,7 @@ void build_cache() {
 void try_best(Board &board, const std::vector<int> &blocks_remained, const int empty_index[2],
               std::vector<Board> &result_boards) {
     if (blocks_remained.empty()) {
-        if (std::all_of(result_boards.begin(), result_boards.end(), [&board](auto &b) { return board != b; })) {
-            result_boards.emplace_back(board);
-        }
+        result_boards.emplace_back(board);
         return;
     };
     auto ids = board.index_available();
@@ -35,8 +33,8 @@ void try_best(Board &board, const std::vector<int> &blocks_remained, const int e
         if (i == empty_index[0] || i == empty_index[1]) continue;
         auto yx = linear_to_coord(i);
         for (auto b: blocks_remained) {
-            for (int flip = 0; flip < 2; flip++) {
-                for (int rot = 0; rot < 4; rot++) {
+            for (int flip = 0; flip < flip_num[b]; flip++) {
+                for (int rot = 0; rot < rotate_num[b]; rot++) {
                     for (int m = 0; m < blocks[b].pos.size(); m++) {
                         auto k = ((b * 2 + flip) * 4 + rot) * 6 + m;
                         if (board.put(cache[k], yx)) {
