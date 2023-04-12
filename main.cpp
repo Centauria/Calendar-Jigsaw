@@ -4,7 +4,7 @@
 #include <chrono>
 #include "concept.h"
 
-std::vector<Block> cache(8 * 2 * 4 * 6);
+Block cache[8 * 2 * 4 * 6];
 
 void build_cache() {
     for (int b = 0; b < 8; b++) {
