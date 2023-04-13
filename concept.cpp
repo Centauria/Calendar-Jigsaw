@@ -104,16 +104,18 @@ Board::operator std::string() {
 
 bool Board::put(const Block &block, Index yx) {
     auto result = true;
-    for (auto &p: block.pos) {
-        auto cell_p = pointer(yx.y + p.y, yx.x + p.x);
+    Cell *cs[6] = {nullptr};
+    for (int i = 0; i < block.pos.size(); i++) {
+        auto cell_p = pointer(yx.y + block.pos[i].y, yx.x + block.pos[i].x);
         if (!cell_p || cell_p->v != -1) {
             result = false;
             break;
         }
+        cs[i] = cell_p;
     }
     if (result) {
-        for (auto &p: block.pos) {
-            operator()(yx.y + p.y, yx.x + p.x).v = block.id;
+        for (int i = 0; i < block.pos.size(); i++) {
+            cs[i]->v = block.id;
         }
     }
     return result;
